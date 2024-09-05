@@ -2,6 +2,7 @@
   <h1>Registrations</h1>
 
   <div class="cards-container">
+    <%= link_to 'New Registration', new_registration_path, class: 'new-registration-btn' %>
     <% @registrations.each do |registration| %>
       <div class="card">
         <h2><%= "#{registration.first_name} #{registration.last_name}" %></h2>

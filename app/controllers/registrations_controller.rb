@@ -27,7 +27,7 @@ class RegistrationsController < ApplicationController
   def update
     @registration = Registration.find(params[:id])
     if @registration.update(registration_params)
-      redirect_to @registration, notice: 'Registration was successfully updated.'
+      redirect_to registrations_url
     else
       render :edit
     end
@@ -36,7 +36,7 @@ class RegistrationsController < ApplicationController
   def destroy
     @registration = Registration.find(params[:id])
     @registration.destroy
-    redirect_to registrations_url, notice: 'Registration was successfully destroyed.'
+    redirect_to registrations_url
   end
 
   private

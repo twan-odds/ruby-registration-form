@@ -48,3 +48,16 @@ h1 {
 .btn-delete {
   background-color: #e74c3c;
 }
+.new-registration-btn {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #2ecc71;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.new-registration-btn:hover {
+  background-color: #27ae60;
+}
