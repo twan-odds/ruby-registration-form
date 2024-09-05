@@ -14,7 +14,7 @@ class RegistrationsController < ApplicationController
   def create
     @registration = Registration.new(registration_params)
     if @registration.save
-      redirect_to @registration, notice: 'Registration was successfully created.'
+      redirect_to registrations_url
     else
       render :new
     end

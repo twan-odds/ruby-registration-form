@@ -1,2 +1,20 @@
-<h1>Registrations#index</h1>
-<p>Find me in app/views/registrations/index.html.erb</p>
+<div class="container">
+  <h1>Registrations</h1>
+
+  <div class="cards-container">
+    <% @registrations.each do |registration| %>
+      <div class="card">
+        <h2><%= "#{registration.first_name} #{registration.last_name}" %></h2>
+        <p><strong>Birthday:</strong> <%= registration.birthday.strftime('%B %d, %Y') %></p>
+        <p><strong>Gender:</strong> <%= registration.gender.capitalize %></p>
+        <p><strong>Email:</strong> <%= registration.email %></p>
+        <p><strong>Phone:</strong> <%= registration.phone_number %></p>
+        <p><strong>Subject:</strong> <%= registration.subject %></p>
+        <div class="card-actions">
+          <%= link_to 'Edit', edit_registration_path(registration), class: 'btn btn-edit' %>
+          <%= button_to 'Delete', registration_path(registration), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-delete' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
