@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/sparklemotion/sqlite3-ruby
+  revision: 164485adb3a6f878701cfa14059e60b30c56f203
+  specs:
+    sqlite3 (2.0.4)
+      mini_portile2 (~> 2.8.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -96,9 +103,6 @@ GEM
     connection_pool (2.4.1)
     crass (1.0.6)
     date (3.3.4)
-    debug (1.9.2)
-      irb (~> 1.10)
-      reline (>= 0.3.8)
     drb (2.2.1)
     erubi (1.13.0)
     globalid (1.2.1)
@@ -128,6 +132,7 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.7)
     minitest (5.25.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
@@ -141,6 +146,9 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    nokogiri (1.16.7)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.16.7-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.16.7-arm-linux)
@@ -200,7 +208,7 @@ GEM
     rdoc (6.7.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
-    reline (0.5.9)
+    reline (0.5.10)
       io-console (~> 0.5)
     rexml (3.3.7)
     rubyzip (2.3.2)
@@ -217,12 +225,6 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3-aarch64-linux)
-    sqlite3 (1.7.3-arm-linux)
-    sqlite3 (1.7.3-arm64-darwin)
-    sqlite3 (1.7.3-x86-linux)
-    sqlite3 (1.7.3-x86_64-darwin)
-    sqlite3 (1.7.3-x86_64-linux)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.1)
@@ -234,6 +236,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2024.1)
+      tzinfo (>= 1.0.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -252,6 +256,7 @@ PLATFORMS
   aarch64-linux
   arm-linux
   arm64-darwin
+  ruby
   x86-linux
   x86_64-darwin
   x86_64-linux
@@ -259,14 +264,14 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
-  debug
   importmap-rails
   jbuilder
+  nokogiri (~> 1.16, >= 1.16.7)
   puma (>= 5.0)
-  rails (~> 7.1.3, >= 7.1.3.4)
+  rails (~> 7.1.4, >= 7.1.3.4)
   selenium-webdriver
   sprockets-rails
-  sqlite3 (~> 1.4)
+  sqlite3!
   stimulus-rails
   turbo-rails
   tzinfo-data

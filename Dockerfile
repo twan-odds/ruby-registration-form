@@ -1,62 +1,48 @@
-# syntax = docker/dockerfile:1
+FROM ruby:3.3.1-alpine AS build
+WORKDIR /myapp
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.3.1
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+# Set environment variables
+ENV RAILS_ENV=production
 
-# Rails app lives here
-WORKDIR /rails
+# Install necessary packages to build gems and assets
+RUN apk add --no-cache \
+    build-base \
+    git \
+    sqlite-dev \
+    tzdata \
+    gcompat
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
-
-
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
-
-# Install application gems
+# Install gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+RUN bundle install
 
 # Copy application code
 COPY . .
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Precompile assets
+RUN SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rake assets:precompile
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+FROM ruby:3.3.1-alpine
+WORKDIR /myapp
 
+# Install runtime dependencies
+RUN apk add --no-cache \
+    sqlite-libs \
+    tzdata \
+    gcompat
 
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built artifacts: gems, application
+# Copy built artifacts from the build stage
+COPY --from=build /myapp /myapp/
 COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
 
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
+# Set environment variables
+ENV RAILS_ENV=production
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Run Docker entrypoint script
+ENTRYPOINT ["/myapp/bin/docker-entrypoint"]
 
-# Start the server by default, this can be overwritten at runtime
+# Expose port 3000
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+
+# Start the Rails server
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
