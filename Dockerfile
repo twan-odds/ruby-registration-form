@@ -19,6 +19,9 @@ RUN bundle install
 # Copy application code
 COPY . .
 
+# Setup the database
+RUN bundle exec rails db:create db:schema:load
+
 # Precompile assets
 RUN SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rake assets:precompile
 
