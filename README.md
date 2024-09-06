@@ -1,24 +1,4 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Overview
+This Project was built by Ruby on Rails. The core function of this project are CRUD (Create, Read, Update, Delete) \
+This project built for Ruby on Rails and Docker practice, the project also have the CI/CD pipeline which using GitHub Action to deploy on AWS EC2 \
+You can see the result of this project on http://twan-journey.oddsfarm.site
