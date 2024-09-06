@@ -1,8 +1,10 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 if [ -f /myapp/tmp/pids/server.pid ]; then
     rm /myapp/tmp/pids/server.pid
 fi
+
+cat "Entry point script for the Rails application"
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" = "./bin/rails" ] && [ "${2}" = "server" ]; then
