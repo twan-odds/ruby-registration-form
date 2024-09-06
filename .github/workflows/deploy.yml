@@ -1,11 +1,11 @@
-name: Deployment
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -28,3 +28,26 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ruby-registration-form:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        HOST: ${{ secrets.EC2_HOST }}
+        USER: ${{ secrets.EC2_USER }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/ruby-registration-form:latest
+          docker stop ruby-registration-form || true
+          docker rm ruby-registration-form || true
+          docker run -d --name ruby-registration-form \
+            -p 3000:3000 \
+            -e RAILS_ENV=production \
+            -e SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }} \
+            ${{ secrets.DOCKERHUB_USERNAME }}/ruby-registration-form:latest
+        '

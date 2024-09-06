@@ -1,9 +1,10 @@
 version: '3.3.1'
 services:
   web:
-    image: pongsaphakmw/ruby-registration-form:latest
+    # image: pongsaphakmw/ruby-registration-form:latest
+    build: .
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./db:/app/db
     environment:
