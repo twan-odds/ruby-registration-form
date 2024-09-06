@@ -45,9 +45,7 @@ jobs:
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/ruby-registration-form:latest
           docker stop ruby-registration-form || true
           docker rm ruby-registration-form || true
-          docker run -d --name ruby-registration-form \
-            -p 3000:3000 \
-            -e RAILS_ENV=production \
-            -e SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/ruby-registration-form:latest
+          cd ruby-registration-form-app &&
+          docker-compose pull &&
+          docker-compose up -d --force-recreate
         '
