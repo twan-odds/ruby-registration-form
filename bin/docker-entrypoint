@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 if [ -f /myapp/tmp/pids/server.pid ]; then
     rm /myapp/tmp/pids/server.pid
