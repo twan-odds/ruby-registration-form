@@ -4,10 +4,10 @@ if [ -f /myapp/tmp/pids/server.pid ]; then
     rm /myapp/tmp/pids/server.pid
 fi
 
-cat "Entry point script for the Rails application"
-
 # If running the rails server then create or migrate existing database
 if [ "${1}" = "./bin/rails" ] && [ "${2}" = "server" ]; then
+  # Debug print message when trigger
+  echo "Running rails server"
   ./bin/rails db:create
   ./bin/rails db:migrate
   ./bin/rails db:prepare
