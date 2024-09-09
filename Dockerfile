@@ -8,13 +8,12 @@ ENV RAILS_ENV=production
 RUN apk add --no-cache \
     build-base \
     git \
-    sqlite-dev \
     tzdata \
     gcompat
 
 # Install gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle install --without development test
 
 # Copy application code
 COPY . .
