@@ -9,21 +9,31 @@ RUN apk add --no-cache \
     build-base \
     git \
     tzdata \
-    gcompat
+    gcompat \
+    nodejs \
+    yarn
 
-# Install gems
+# Install only necessary gems and remove extensions
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --without development test
+RUN bundle config set --local without 'development test' && \
+    bundle install --jobs 4 --retry 3 && \
+    rm -rf /usr/local/bundle/cache/*.gem && \
+    find /usr/local/bundle/gems/ -name "*.c" -delete && \
+    find /usr/local/bundle/gems/ -name "*.o" -delete
+
 
 # Copy application code
 COPY . .
 
+# Install node modules
+RUN yarn install --frozen-lockfile
 
-# Precompile assets
-RUN SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rake assets:precompile
+# Precompile assets and then remove unnecessary files
+RUN SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rake assets:precompile && \
+    rm -rf node_modules tmp/cache vendor/assets test spec
 
 # Setup the database
-RUN SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rails db:create db:schema:load
+# RUN SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rails db:create db:schema:load
 
 FROM ruby:3.3.1-alpine
 WORKDIR /myapp
