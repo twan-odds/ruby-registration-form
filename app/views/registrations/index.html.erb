@@ -13,9 +13,11 @@
         <p><strong>Subject:</strong> <%= registration.subject %></p>
         <div class="card-actions">
           <%= link_to 'Edit', edit_registration_path(registration), class: 'btn btn-edit' %>
-          <%= button_to 'Delete', registration_path(registration), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-delete' %>
+          <%= button_to 'Delete', confirm_destroy_registration_path(registration), method: :get, class: 'btn btn-delete', data: { turbo_frame: "modal" } %>
         </div>
       </div>
     <% end %>
   </div>
 </div>
+
+<%= turbo_frame_tag "modal" %>
